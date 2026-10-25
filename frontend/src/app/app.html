@@ -1,0 +1,41 @@
+<main class="page">
+  <header class="hero">
+    <div class="eyebrow">MACHINE LEARNING · DEVOPS DEMO</div>
+    <h1>PhishLens</h1>
+    <p>PhiUSIIL-based phishing classification dashboard</p>
+    <div class="status">Angular frontend <span>↔</span> Flask prediction API</div>
+  </header>
+
+  <section class="notice">
+    <strong>Demo limitation</strong>
+    This prototype predicts from numeric dataset features. It does not extract features from a URL or inspect a live website.
+  </section>
+
+  <section class="panel">
+    <h2>Prediction module</h2>
+    <p>Paste a JSON object containing numeric feature names and values from the model's expected feature set.</p>
+    <label for="api">Flask API base URL</label>
+    <input id="api" [(ngModel)]="apiUrl" placeholder="http://127.0.0.1:5000">
+    <label for="features">Feature JSON</label>
+    <textarea id="features" [(ngModel)]="jsonInput" rows="10" placeholder='{"URLLength": 42, "IsHTTPS": 1}'></textarea>
+    <div class="actions">
+      <button class="secondary" (click)="loadExample()" [disabled]="busy">Load demo vector</button>
+      <button (click)="predict()" [disabled]="busy">{{ busy ? 'Please wait…' : 'Predict' }}</button>
+    </div>
+    <p class="error" *ngIf="error">{{ error }}</p>
+  </section>
+
+  <section class="panel result" *ngIf="result">
+    <div class="eyebrow">PREDICTION RESULT</div>
+    <h2>{{ result.category }}</h2>
+    <p>Predicted class: {{ result.prediction }}</p>
+    <h3 *ngIf="result.class_probabilities">Class probabilities</h3>
+    <div class="prob" *ngFor="let item of (result.class_probabilities | keyvalue)">
+      <span>Class {{ item.key }}</span>
+      <strong>{{ (+item.value) * 100 | number:'1.1-2' }}%</strong>
+    </div>
+    <p class="muted">{{ result.note }}</p>
+  </section>
+
+  <footer>Research prototype · Verify dataset label mapping and model performance before real-world use.</footer>
+</main>
